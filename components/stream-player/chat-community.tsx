@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { LocalParticipant, RemoteParticipant } from "livekit-client"
+import { useMemo, useState } from "react"
 import { useDebounce } from "usehooks-ts"
 import { useParticipants } from "@livekit/components-react"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
+import CommunityItem from "./community-item"
 
 
 interface ChatCommunityProps {
@@ -15,12 +17,27 @@ interface ChatCommunityProps {
 
 export const ChatCommunity = ({ hostName, viewerName, isHidden }: ChatCommunityProps) => {
     const [value, setValue] = useState("")
-    const participant = useParticipants()
+    const participants = useParticipants()
     const debounceValue = useDebounce<string>(value, 500)
 
     const onChange = (newValue: string) => {
         setValue(newValue)
     }
+
+    const filteredParticipants = useMemo(() => {
+        const deduped: RemoteParticipant[] = participants.reduce((acc: RemoteParticipant[], participant: RemoteParticipant | LocalParticipant) => {
+            const hostAsViewer = `host-${participant.identity}`;
+            if (!acc.some((p: RemoteParticipant) => p.identity === hostAsViewer)) {
+                acc.push(participant as RemoteParticipant);
+            }
+            return acc;
+        }, []);
+
+        return deduped.filter((participant: RemoteParticipant) => {
+            return participant.name?.toLowerCase().includes(debounceValue.toLowerCase());
+        });
+    }, [participants, debounceValue]);
+
 
     if (isHidden) {
         return (
@@ -30,7 +47,6 @@ export const ChatCommunity = ({ hostName, viewerName, isHidden }: ChatCommunityP
         )
     }
 
-    const filteredParticipant = participant.filter((participant) => { })
 
     return (
         <div className="p-4">
@@ -41,12 +57,12 @@ export const ChatCommunity = ({ hostName, viewerName, isHidden }: ChatCommunityP
             />
             <ScrollArea className="gap-y-2 mt-4">
                 <p className="text-center text-sm text-muted-foreground hidden last:block p-2">No Result</p>
-                {participant.map((participant) => (
+                {filteredParticipants.map((participant: any) => (
                     <CommunityItem
                         key={participant.identity}
                         hostName={hostName}
                         viewerName={viewerName}
-                        participant={participant.name}
+                        participantName={participant.name}
                         participantIdentity={participant.identity}
                     />
                 ))}

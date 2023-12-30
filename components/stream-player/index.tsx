@@ -3,11 +3,13 @@
 import { useViewerToken } from "@/hooks/use-viewer-token"
 import { Stream, User } from "@prisma/client"
 import { LiveKitRoom } from "@livekit/components-react"
-import Video from "./video"
+import Video, { VideoSkeleton } from "./video"
 import { useChatSidebar } from "@/store/use-chat-sidebar"
 import { cn } from "@/lib/utils"
 import { ChatToggle } from "./chat-toggle"
-import { Chat } from "./chat"
+import { Chat, ChatSkeleton } from "./chat"
+import { Header, HeaderSkeleton } from "./header"
+import { InfoCard } from "./info-card"
 
 
 interface StreamPlayerProps {
@@ -32,7 +34,7 @@ export const StreamPlayer = ({
 
     if (!token || !name || !identity) {
         return (
-            <div>Cannot watch the stream</div>
+            <StreamPlayerSkeleton />
         )
     }
 
@@ -56,6 +58,20 @@ export const StreamPlayer = ({
                         hostname={user.username}
                         hostIdentity={user.id}
                     />
+                    <Header
+                        hostName={user.username}
+                        hostIdentity={user.id}
+                        viewerIdentity={identity}
+                        imageUrl={user.imageUrl}
+                        isFollowing={isFollowing}
+                        name={stream.name}
+                    />
+                    <InfoCard
+                        hostIdentity={user.id}
+                        viewerIdentity={identity}
+                        name={stream.name}
+                        thumbnail={stream.thumbnailUrl}
+                    />
                 </div>
                 <div className={cn(
                     "col-span-1",
@@ -74,4 +90,20 @@ export const StreamPlayer = ({
             </LiveKitRoom>
         </>
     )
-}   
+}
+
+
+export const StreamPlayerSkeleton = () => {
+    return (
+        <div className="grid grid-cols-1 lg:gapxy0
+         lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 h-full">
+            <div className="space-y-4 col-span-1 lg:col-span-2 xl:col-span-2 2xl:col-span-5 lg:overflow-y-auto pb-10 hidden-scrollbar">
+                <VideoSkeleton />
+                <HeaderSkeleton />
+            </div>
+            <div className="col-span-1 bg-background">
+                <ChatSkeleton />
+            </div>
+        </div>
+    )
+}

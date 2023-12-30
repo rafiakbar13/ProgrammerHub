@@ -9,6 +9,7 @@ import {
 import { OfflineVideo } from './offline-video'
 import { Loading } from './loading'
 import { LiveVideo } from './live-video'
+import { Skeleton } from '../ui/skeleton'
 
 
 
@@ -46,3 +47,11 @@ const video = ({
 }
 
 export default video
+
+export const VideoSkeleton = () => {
+    return (
+        <div className='aspect-video border-x border-background'>
+            <Skeleton className='h-full w-full rounded-none' />
+        </div>
+    )
+}

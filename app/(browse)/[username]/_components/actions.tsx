@@ -13,7 +13,7 @@ interface ActionsProps {
 
 export const Actions = ({
     isFollowing,
-    userId
+    userId,
 }: ActionsProps) => {
     const [isPending, startTransitions] = useTransition()
     const handleFollow = () => {
