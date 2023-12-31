@@ -7,7 +7,9 @@ export default authMiddleware({
     publicRoutes: [
         "/",
         "/api/webhooks(.*)",
-        "/api/uploadthing"
+        "/api/uploadthing",
+        "/:username",
+        "/search",
     ],
 });
 
