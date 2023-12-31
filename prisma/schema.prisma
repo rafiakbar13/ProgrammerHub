@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
@@ -9,6 +6,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
@@ -18,46 +16,16 @@ model User {
   externalUserId String @unique
   bio String? @db.Text
 
-  following Follow[] @relation(name:"Following")
-  followedBy Follow[] @relation(name:"FollowedBy")
+  following Follow[] @relation("Following")
+  followedBy Follow[] @relation("FollowedBy")
 
-  blocking Block[] @relation(name:"Blocking")
-  blockedBy Block[] @relation(name:"BlockedBy")
+  blocking Block[] @relation("Blocking")
+  blockedBy Block[] @relation("BlockedBy")
 
   streams Stream?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-
-model Follow {
-  id String @id @default(uuid())
-  followerId String
-  followingId String
-
-  follower User @relation(name:"Following", fields: [followerId], references: [id], onDelete: Cascade)
-  following User @relation(name: "FollowedBy", fields: [followingId], references: [id], onDelete: Cascade)
-
-  @@unique([followerId, followingId])
-  @@index([followerId])
-  @@index([followingId])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Block {
-  id String @id @default(uuid())
-  blockerId String
-  blockedId String
-
-  blocker User @relation(name:"Blocking", fields: [blockerId], references: [id], onDelete: Cascade)
-  blocked User @relation(name: "BlockedBy", fields: [blockedId], references: [id], onDelete: Cascade)
-
-  @@unique([blockerId, blockedId])
-  @@index([blockerId])
-  @@index([blockedId])
 }
 
 model Stream {
@@ -85,3 +53,37 @@ model Stream {
   // @@fulltext([name])
 
 }
+
+model Follow {
+  id String @id @default(uuid())
+  followerId String
+  followingId String
+
+  follower User @relation(name:"Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation(name: "FollowedBy", fields: [followingId], references: [id], onDelete: Cascade)
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+
+ 
+}
+
+model Block {
+  id String @id @default(uuid())
+  blockerId String
+  blockedId String
+
+  blocker User @relation(name:"Blocking", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation(name: "BlockedBy", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+}
+
+
