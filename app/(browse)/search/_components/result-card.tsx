@@ -10,12 +10,10 @@ interface ResultCardProps {
   data: {
     id: string;
     name: string;
-    thumbnailUrl: string;
+    thumbnailUrl: string | null;
     isLive: boolean;
-    updatedAt: string;
-    user: User & {
-      streams: Stream[];
-    };
+    updatedAt: Date;
+    user: User;
   };
 }
 

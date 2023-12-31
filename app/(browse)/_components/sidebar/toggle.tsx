@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {};
 
-const toggle = (props: Props) => {
+const Toggle = (props: Props) => {
   const { collapsed, onCollapse, onExpand } = useSidebar((state) => state);
 
   const label = collapsed ? "Expand" : "Collapse";
@@ -42,7 +42,7 @@ const toggle = (props: Props) => {
   );
 };
 
-export default toggle;
+export default Toggle;
 
 export const ToggleSkeleton = () => {
   return (

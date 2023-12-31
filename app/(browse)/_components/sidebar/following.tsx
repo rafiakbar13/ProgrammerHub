@@ -13,7 +13,7 @@ interface FollowingProps {
   })[];
 }
 
-const following = ({ data }: FollowingProps) => {
+const Following = ({ data }: FollowingProps) => {
   const { collapsed } = useSidebar();
   if (!data.length) return null;
 
@@ -38,7 +38,7 @@ const following = ({ data }: FollowingProps) => {
   );
 };
 
-export default following;
+export default Following;
 
 export const FollowingSkeleton = () => {
   return (

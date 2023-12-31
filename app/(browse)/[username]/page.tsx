@@ -26,7 +26,9 @@ const UserPage = async ({ params }: UserPageProps) => {
 
   const stream = user.streams || null; // Add this line to ensure `stream` property is present
 
-  return <StreamPlayer user={user} stream={stream} isFollowing={isFollowing} />;
+  return (
+    <StreamPlayer user={user} streams={stream} isFollowing={isFollowing} />
+  );
 };
 
 export default UserPage;

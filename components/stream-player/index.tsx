@@ -27,18 +27,18 @@ type CustomUser = {
   username: string;
   bio: string | null;
   imageUrl: string;
-  stream: CustomStream | null;
+  streams: CustomStream | null;
   _count: { followedBy: number };
 };
 interface StreamPlayerProps {
   user: CustomUser;
-  stream: CustomStream;
+  streams: CustomStream;
   isFollowing: boolean;
 }
 
 export const StreamPlayer = ({
   user,
-  stream,
+  streams,
   isFollowing,
 }: StreamPlayerProps) => {
   const { collapsed } = useChatSidebar();
@@ -71,13 +71,13 @@ export const StreamPlayer = ({
             viewerIdentity={identity}
             imageUrl={user.imageUrl}
             isFollowing={isFollowing}
-            name={stream.name}
+            name={streams.name}
           />
           <InfoCard
             hostIdentity={user.id}
             viewerIdentity={identity}
-            name={stream.name}
-            thumbnail={stream.thumbnailUrl}
+            name={streams.name}
+            thumbnail={streams.thumbnailUrl}
           />
           <AboutCard
             hostName={user.username}
@@ -93,9 +93,9 @@ export const StreamPlayer = ({
             hostName={user.username}
             hostIdentity={user.id}
             isFollowing={isFollowing}
-            isChatEnabled={stream.isChatEnabled}
-            isChatDelayed={stream.isChatDelayed}
-            isChatFollowerOnly={stream.isChatFollowersOnly}
+            isChatEnabled={streams.isChatEnabled}
+            isChatDelayed={streams.isChatDelayed}
+            isChatFollowerOnly={streams.isChatFollowersOnly}
           />
         </div>
       </LiveKitRoom>

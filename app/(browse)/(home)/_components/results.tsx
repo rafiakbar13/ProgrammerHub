@@ -11,7 +11,7 @@ const Results = async (props: Props) => {
   return (
     <div>
       <h2 className="text-lg font-semibold mb-4">
-        Streams we think you'll like
+        Streams we think you&apos;ll like
       </h2>
       {data?.length === 0 && (
         <div className="text-muted-foreground text-sm">No streams found</div>
