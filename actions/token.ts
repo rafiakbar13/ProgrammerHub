@@ -12,7 +12,7 @@ export const createViewerToken = async (hostIdentity: string) => {
 
   try {
     self = await getSelf();
-  } catch (error) {
+  } catch {
     const id = v4();
     const username = `guest#${Math.floor(Math.random() * 1000)}`;
     self = { id, username };
@@ -21,7 +21,7 @@ export const createViewerToken = async (hostIdentity: string) => {
   const host = await getUserById(hostIdentity);
 
   if (!host) {
-    throw new Error("user not found");
+    throw new Error("User not found");
   }
 
   const isBlocked = await isBlockedByUser(host.id);
@@ -40,6 +40,7 @@ export const createViewerToken = async (hostIdentity: string) => {
       name: self.username,
     }
   );
+
   token.addGrant({
     room: host.id,
     roomJoin: true,
